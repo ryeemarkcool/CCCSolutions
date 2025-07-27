@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PocketBase from 'pocketbase';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
 const pb = new PocketBase('https://mmhs.pockethost.io');
 
@@ -95,22 +96,25 @@ export default function AuthForm() {
             </div>
 
             <div>
-              <button
+              <Button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                variant="indigo"
+                width="full"
+                size="default"
               >
                 {isLogin ? 'Sign in' : 'Create account'}
-              </button>
+              </Button>
             </div>
           </form>
 
           <div className="mt-4 text-center">
-            <button
+            <Button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-indigo-600 hover:text-indigo-500"
+              variant="link"
+              size="sm"
             >
               {isLogin ? 'Need to create an account?' : 'Already have an account?'}
-            </button>
+            </Button>
           </div>
 
           {error && (

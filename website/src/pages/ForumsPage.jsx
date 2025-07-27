@@ -3,6 +3,7 @@ import PocketBase from 'pocketbase';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
+import Button from '../components/Button';
 
 const pb = new PocketBase('https://mmhs.pockethost.io');
 
@@ -91,21 +92,22 @@ export default function ForumPage() {
             <div className="flex items-center">
               <span className="mr-4">Sort by:</span>
               {['new', 'top'].map(option => (
-                <button
+                <Button
                   key={option}
                   onClick={() => setSortBy(option)}
-                  className={`mr-2 ${sortBy === option ? 'bg-blue-500 text-white' : 'bg-gray-200'} px-3 py-1 rounded`}
+                  variant={sortBy === option ? 'primary' : 'secondary'}
+                  size="sm"
+                  className="mr-2"
                 >
                   {option.charAt(0).toUpperCase() + option.slice(1)}
-                </button>
+                </Button>
               ))}
             </div>
 
-            <Link
-              to="/create-post"
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-            >
-              Create New Post
+            <Link to="/create-post">
+              <Button variant="primary" className="bg-green-500 hover:bg-green-600">
+                Create New Post
+              </Button>
             </Link>
           </div>
 
@@ -131,21 +133,23 @@ export default function ForumPage() {
                       By {post.expand?.author?.username || 'Unknown'} on {new Date(post.created).toLocaleDateString()}
                     </span>
                     <div className="flex items-center space-x-2">
-                      <button
+                      <Button
                         onClick={() => handleVote(post.id, 'upvote')}
-                        className="text-green-500 hover:text-green-600"
+                        variant="upvote"
+                        size="icon-sm"
                         disabled={!user}
                       >
                         ▲
-                      </button>
+                      </Button>
                       <span>{post.upvotes}</span>
-                      <button
+                      <Button
                         onClick={() => handleVote(post.id, 'downvote')}
-                        className="text-red-500 hover:text-red-600"
+                        variant="downvote"
+                        size="icon-sm"
                         disabled={!user}
                       >
                         ▼
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

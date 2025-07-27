@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoImage from '../assets/mmhs_logo.png';
+import Button from './Button';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,9 +68,11 @@ const Navbar = () => {
             </div>
           </div>
           <div className="md:hidden">
-            <button
+            <Button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              variant="ghost"
+              size="icon"
+              rounded="default"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -77,7 +80,7 @@ const Navbar = () => {
               ) : (
                 <Menu className="block h-6 w-6" aria-hidden="true" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

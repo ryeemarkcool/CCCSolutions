@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import PocketBase from 'pocketbase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
+import Button from '../components/Button';
 
 const pb = new PocketBase('https://mmhs.pockethost.io');
 
@@ -118,19 +119,21 @@ export default function PostPage() {
             </span>
 
               <div className="flex items-center space-x-1">
-                <button
+                <Button
                     onClick={() => handleVote('upvote')}
-                    className="text-green-500 hover:text-green-600"
+                    variant="upvote"
+                    size="icon-sm"
                 >
                   ▲
-                </button>
+                </Button>
                 <span className="font-semibold text-lg">{post.upvotes}</span>
-                <button
+                <Button
                     onClick={() => handleVote('downvote')}
-                    className="text-red-500 hover:text-red-600"
+                    variant="downvote"
+                    size="icon-sm"
                 >
                   ▼
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -162,12 +165,14 @@ export default function PostPage() {
                 rows="4"
                 required
             />
-              <button
+              <Button
                   type="submit"
-                  className="mt-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+                  variant="primary"
+                  rounded="lg"
+                  className="mt-3"
               >
                 Add Comment
-              </button>
+              </Button>
             </form>
           </div>
         </div>

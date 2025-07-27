@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Button from './Button';
 
 const SearchBar = ({ problems }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,12 +50,14 @@ const SearchBar = ({ problems }) => {
         />
         {/* Clear Button */}
         {searchQuery && (
-          <button
+          <Button
             onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+            variant="ghost"
+            size="icon-sm"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
             &times;
-          </button>
+          </Button>
         )}
       </div>
       {/* Dropdown that displays results */}

@@ -4,6 +4,7 @@ import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Helmet } from "react-helmet";
 import { Info, Code, FileText } from "lucide-react";
 import { problems } from "../../constants";
+import Button from "../components/Button";
 
 const Problem = ({ contestYear, problemCode }) => {
   const [solutions, setSolutions] = useState([]);
@@ -221,17 +222,15 @@ const Problem = ({ contestYear, problemCode }) => {
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
               <div className="flex items-center p-4 border-b border-gray-200 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
                 {Array.from({ length: 10 }, (_, idx) => (
-                  <button
+                  <Button
                     key={idx}
                     onClick={() => handleTabClick(idx)}
-                    className={`px-3 py-1 mr-2 text-sm font-medium rounded-md transition-colors ${
-                      activeTab === idx 
-                      ? "bg-blue-600 text-white" 
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    variant={activeTab === idx ? "primary" : "secondary"}
+                    size="sm"
+                    className="mr-2"
                   >
                     Case {idx + 1}
-                  </button>
+                  </Button>
                 ))}
               </div>
               

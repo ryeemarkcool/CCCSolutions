@@ -3,6 +3,7 @@ import PocketBase from 'pocketbase';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Button from '../components/Button';
 
 const pb = new PocketBase('https://mmhs.pockethost.io');
 
@@ -103,12 +104,14 @@ export default function CreatePost() {
             className="bg-white"
           />
         </div>
-        <button
+        <Button
           type="submit"
-          className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition"
+          variant="primary"
+          width="full"
+          size="default"
         >
           Create Post
-        </button>
+        </Button>
       </form>
     </div>
   );
