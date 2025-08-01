@@ -21,6 +21,10 @@ const App = () => {
         <Navbar />
         <main className="flex-grow">
           <Routes>
+            {/* Route for static files */}
+            <Route path="/public/*" element={null} />
+
+            {/* Other routes */}
             <Route path="/" element={<Home />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/contest/:contestYear/:problemCode" element={<ProblemWrapper />} />

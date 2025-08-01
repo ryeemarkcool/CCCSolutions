@@ -87,25 +87,92 @@ const Problem = ({ contestYear, problemCode }) => {
 
   const fetchTestCase = async (idx) => {
     setTestCaseData({ input: "Loading...", output: "Loading..." });
-    const basePath = `/past_contests/${contestYear}/${problemCode}/test_data`;
 
-    try {
-      const inputResponse = await fetch(`${basePath}/${problemCode}.${idx + 1}.in`);
-      const outputResponse = await fetch(`${basePath}/${problemCode}.${idx + 1}.out`);
+    const basePathJunior = `/public/2016+ test cases/${contestYear}CCCJuniorTestData/${problemCode}`;
+    const basePathSenior = `/public/2016+ test cases/${contestYear}CCCSeniorTestData/${problemCode}`;
 
-      const inputText = inputResponse.ok ? await inputResponse.text() : "No input found";
-      const outputText = outputResponse.ok ? await outputResponse.text() : "No output found";
+    // Define input and output
+    const possibleInputFilenames = [
+      `${problemCode}.${idx + 1}.in`,
+      `${problemCode}.case${idx + 1}.in`,
+      `${problemCode}${idx + 1}.in`,
+      `${problemCode}_${idx + 1}.in`,
+      `${problemCode}.${String.fromCharCode(97 + idx)}.in`, 
+    ];
 
-      setTestCaseData({ input: inputText, output: outputText });
-    } catch (error) {
-      console.error(`Error fetching test case ${idx + 1}:`, error);
-      setTestCaseData({ input: "Error loading input", output: "Error loading output" });
+    const possibleOutputFilenames = [
+      `${problemCode}.${idx + 1}.out`,
+      `${problemCode}.case${idx + 1}.out`,
+      `${problemCode}${idx + 1}.out`,
+      `${problemCode}_${idx + 1}.out`,
+      `${problemCode}.${String.fromCharCode(97 + idx)}.out`, 
+    ];
+
+    let inputText = "No input found";
+    let outputText = "No output found";
+
+    // Helper function to fetch a file
+    const fetchFile = async (basePath, filename) => {
+      try {
+        
+        const fullPath = `${window.location.origin}${basePath}/${filename}`;
+        console.log("Attempting to fetch:", fullPath);
+        const response = await fetch(fullPath);
+        if (response.ok) {
+          const text = await response.text();
+          console.log(`Successfully fetched: ${fullPath}`);
+          return text;
+        } else {
+          console.log(`Failed to fetch: ${fullPath} - Status: ${response.status}`);
+          return null;
+        }
+      } catch (error) {
+        console.error(`Error fetching ${basePath}/${filename}:`, error);
+        return null;
+      }
+    };
+
+    
+    for (const inputFilename of possibleInputFilenames) {
+      const input = await fetchFile(basePathJunior, inputFilename);
+      if (input) {
+        inputText = input;
+        break;
+      }
     }
-  };
 
-  const handleTabClick = (idx) => {
-    setActiveTab(idx);
-    fetchTestCase(idx);
+    
+    if (inputText === "No input found") {
+      for (const inputFilename of possibleInputFilenames) {
+        const input = await fetchFile(basePathSenior, inputFilename);
+        if (input) {
+          inputText = input;
+          break;
+        }
+      }
+    }
+
+    
+    for (const outputFilename of possibleOutputFilenames) {
+      const output = await fetchFile(basePathJunior, outputFilename);
+      if (output) {
+        outputText = output;
+        break;
+      }
+    }
+
+    
+    if (outputText === "No output found") {
+      for (const outputFilename of possibleOutputFilenames) {
+        const output = await fetchFile(basePathSenior, outputFilename);
+        if (output) {
+          outputText = output;
+          break;
+        }
+      }
+    }
+
+    setTestCaseData({ input: inputText, output: outputText });
   };
 
   const isValidTestCase = (testCase) =>
@@ -129,11 +196,11 @@ const Problem = ({ contestYear, problemCode }) => {
   };
 
   const getLanguageFromCode = (code) => {
-    // Detect language from code content
+    
     if (code.includes("import java.") || code.includes("public class")) return "java";
     if (code.includes("#include <iostream>") || code.includes("using namespace std;")) return "cpp";
     if (code.includes("def ") || code.includes("input()") && !code.includes("import java.")) return "python";
-    // Default to cpp as most solutions are in C++
+    
     return "cpp";
   };
 
@@ -141,6 +208,11 @@ const Problem = ({ contestYear, problemCode }) => {
   const keywords = problemInfo ? 
     `${problemInfo.name}, CCC ${contestYear} ${problemCode}, ${problemInfo.tags.join(', ')}, Solution` :
     `CCC ${contestYear} ${problemCode.toUpperCase()} Solution`;
+
+  const handleTabClick = (idx) => {
+    setActiveTab(idx);
+    fetchTestCase(idx);
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
@@ -240,7 +312,7 @@ const Problem = ({ contestYear, problemCode }) => {
                   <div className="text-center py-8 text-gray-500">
                     <p>Select a test case to view input and output</p>
                   </div>
-                ) : isValidTestCase(testCaseData.input) && isValidTestCase(testCaseData.output) ? (
+                ) : (testCaseData.input !== "No input found" && testCaseData.output !== "No output found") ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">Input:</h3>
